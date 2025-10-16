@@ -5,6 +5,7 @@
   "description": "Constrogen Web Application with PWA support",
   "homepage": "https://intellectoglobal.github.io/constrogen-prem-testing/",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
