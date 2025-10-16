@@ -4,16 +4,6 @@ import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// Replace <repo-name> with your GitHub repository name
-export default defineConfig({
-  base: '/constrogen-prem-testing/',
-  plugins: [react()]
-})
-
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // https://vite.dev/config/
