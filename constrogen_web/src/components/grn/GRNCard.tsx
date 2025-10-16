@@ -1,5 +1,5 @@
-import { GRN } from 'shared/types/purchase';
-import { COLORS } from 'shared/constants/theme';
+import { GRN } from '../../../shared/types/purchase';
+import { COLORS } from '../../../shared/constants/theme';
 
 interface GRNCardProps {
   grn: GRN;

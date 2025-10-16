@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import rootReducer from "shared/redux/rootReducer";
-import { createRootSaga } from "shared/redux/sagas/rootSaga";
-import { WebStorageService } from "shared/services/storageService";
+import rootReducer from "../../shared/redux/rootReducer";
+import { createRootSaga } from "../../shared/redux/sagas/rootSaga";
+import { WebStorageService } from "../../shared/services/storageService";
 import type { Middleware } from "@reduxjs/toolkit";
 
 // Initialize saga middleware

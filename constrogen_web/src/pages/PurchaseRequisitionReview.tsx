@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../shared/constants/theme';
 import { RequisitionData, requisitionApi } from '../services/requisitionApi';
 import { showToast } from '../utils/toast';
 

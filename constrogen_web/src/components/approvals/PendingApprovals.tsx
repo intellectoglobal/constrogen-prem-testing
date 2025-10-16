@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PurchaseRequest } from 'shared/types/purchase';
 import { approvalApi } from '../../services/approvalApi';
 import { showToast } from '../../utils/toast';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../../shared/constants/theme';
 import PurchaseRequestCard from '../purchase/PurchaseRequestCard';
 import PurchaseRequestDetailsModal from '../purchase/PurchaseRequestDetailsModal';
 import SearchBar from '../common/SearchBar';

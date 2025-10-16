@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Item, UOM, RequisitionItem, requisitionApi } from '../../services/requisitionApi';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../../shared/constants/theme';
 
 interface AddItemModalProps {
   isOpen: boolean;

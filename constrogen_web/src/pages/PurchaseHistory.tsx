@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PurchaseRequest } from 'shared/types/purchase';
 import { approvalApi } from '../services/approvalApi';
 import { showToast } from '../utils/toast';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../shared/constants/theme';
 import PurchaseRequestCard from '../components/purchase/PurchaseRequestCard';
 import PurchaseRequestDetailsModal from '../components/purchase/PurchaseRequestDetailsModal';
 import SearchBar from '../components/common/SearchBar';

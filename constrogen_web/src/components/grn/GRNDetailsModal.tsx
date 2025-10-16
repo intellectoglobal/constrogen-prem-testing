@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GRN, GRNItem } from 'shared/types/purchase';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../../shared/constants/theme';
 import { grnApi } from '../../services/grnApi';
 import { showToast } from '../../utils/toast';
 

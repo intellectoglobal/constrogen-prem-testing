@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { showToast } from "../utils/toast";
-import { checkRefetchToken } from "shared/redux/slices/authSlice";
+import { checkRefetchToken } from "../../shared/redux/slices/authSlice";
 import { authApi } from "../services/api";
 import { RootState } from "../store";
-import { COLORS } from "shared/constants/theme";
+import { COLORS } from "../../shared/constants/theme";
 
 interface FormData {
   otp: string;

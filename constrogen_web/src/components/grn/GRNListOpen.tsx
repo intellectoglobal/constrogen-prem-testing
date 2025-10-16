@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { GRN } from 'shared/types/purchase';
+import { GRN } from '../../../shared/types/purchase';
 import { grnApi } from '../../services/grnApi';
 import { showToast } from '../../utils/toast';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../../shared/constants/theme';
 import GRNCard from './GRNCard';
 import GRNDetailsModal from './GRNDetailsModal';
 

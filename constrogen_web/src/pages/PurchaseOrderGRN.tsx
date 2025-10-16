@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from 'shared/constants/theme';
+import { COLORS } from '../../shared/constants/theme';
 import GRNListOpen from '../components/grn/GRNListOpen';
 import GRNListClosed from '../components/grn/GRNListClosed';
 

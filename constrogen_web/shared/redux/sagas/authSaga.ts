@@ -1,4 +1,13 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import {
+  take,
+  call,
+  put,
+  fork,
+  cancel,
+  ForkEffect,
+  TakeEffect,
+  CancelEffect,
+} from "redux-saga/effects";
 import {
   checkRefetchToken,
   logoutRequest,
@@ -15,9 +24,12 @@ import { IStorageService, StorageKeys } from "../../services/storageService";
 export const createAuthSaga = (storageService: IStorageService) => {
   function* verifyOtpSaga(action: any): Generator<any, void, any> {
     try {
-      const { isAuthenticatedVerify = false, ...restPayload } = action?.payload || {};
+      const { isAuthenticatedVerify = false, ...restPayload } =
+        action?.payload || {};
 
-      let authInfo = (yield call(() => storageService.get(StorageKeys.AUTH_INFO))) as any;
+      let authInfo = (yield call(() =>
+        storageService.get(StorageKeys.AUTH_INFO)
+      )) as any;
 
       if (authInfo === null && !isAuthenticatedVerify) {
         const isAuthenticated = true;
@@ -54,9 +66,21 @@ export const createAuthSaga = (storageService: IStorageService) => {
     }
   }
 
+  // Helper to mimic takeLatest for a single pattern
+  function* watchAndTakeLatest(
+    actionType: string,
+    saga: (...args: any[]) => any
+  ): Generator<ForkEffect | TakeEffect | CancelEffect, void, any> {
+    while (true) {
+      const action = yield take(actionType);
+      const task = yield fork(saga, action);
+      yield take(actionType);
+      yield cancel(task);
+    }
+  }
+
   return function* authSaga() {
-    yield takeLatest(checkRefetchToken.type, verifyOtpSaga);
-    yield takeLatest(logoutRequest.type, logoutSaga);
+    yield fork(watchAndTakeLatest, checkRefetchToken.type, verifyOtpSaga);
+    yield fork(watchAndTakeLatest, logoutRequest.type, logoutSaga);
   };
 };
-
