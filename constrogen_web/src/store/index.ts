@@ -3,6 +3,7 @@ import createSagaMiddleware from "redux-saga";
 import rootReducer from "@shared/redux/rootReducer";
 import { createRootSaga } from "@shared/redux/sagas/rootSaga";
 import { WebStorageService } from "@shared/services/storageService";
+import type { Middleware } from "@reduxjs/toolkit";
 
 // Initialize saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -20,7 +21,7 @@ const store = configureStore({
     getDefaultMiddleware({
       thunk: false,
       serializableCheck: false,
-    }).concat(sagaMiddleware),
+    }).concat(sagaMiddleware as Middleware),
 });
 
 // Run the root saga

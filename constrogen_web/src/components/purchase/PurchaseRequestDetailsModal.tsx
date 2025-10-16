@@ -1,4 +1,3 @@
-import React from 'react';
 import { PurchaseRequest, getStatusColor, getStatusLabel } from '@shared/types/purchase';
 import { COLORS } from '@shared/constants/theme';
 

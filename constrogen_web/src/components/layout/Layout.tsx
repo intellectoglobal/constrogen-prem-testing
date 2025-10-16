@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutRequest } from '@shared/redux/slices/authSlice';
@@ -66,7 +66,7 @@ export default function Layout() {
                 </svg>
               </button>
               <img src="/hook128.png" alt="Logo" className="w-8 h-8 mr-3" />
-              <h1 className="text-xl font-bold" style={{ color: COLORS.primary }}>
+              <h1 className="text-xl font-bold" style={{ color: COLORS.primaryColor }}>
                 Constrogen
               </h1>
             </div>
@@ -82,7 +82,7 @@ export default function Layout() {
                       ? 'bg-primary bg-opacity-10'
                       : 'hover:bg-gray-100'
                   }`}
-                  style={isActive(item.path) ? { color: COLORS.primary } : { color: COLORS.primaryText }}
+                  style={isActive(item.path) ? { color: COLORS.primaryColor } : { color: COLORS.primaryText }}
                 >
                   {item.icon}
                   <span className="ml-2">{item.name}</span>
@@ -127,7 +127,7 @@ export default function Layout() {
                       ? 'bg-primary bg-opacity-10'
                       : 'hover:bg-gray-100'
                   }`}
-                  style={isActive(item.path) ? { color: COLORS.primary } : { color: COLORS.primaryText }}
+                  style={isActive(item.path) ? { color: COLORS.primaryColor } : { color: COLORS.primaryText }}
                 >
                   {item.icon}
                   <span className="ml-3">{item.name}</span>

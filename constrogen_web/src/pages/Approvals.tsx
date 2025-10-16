@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { COLORS } from '@shared/constants/theme';
 import PendingApprovals from '../components/approvals/PendingApprovals';
 import ApprovedRequests from '../components/approvals/ApprovedRequests';
@@ -32,8 +32,8 @@ export default function Approvals() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
                 style={activeTab === 'pending' ? { 
-                  borderColor: COLORS.primary, 
-                  color: COLORS.primary 
+                  borderColor: COLORS.primaryColor, 
+                  color: COLORS.primaryColor 
                 } : {}}
               >
                 Pending
@@ -46,8 +46,8 @@ export default function Approvals() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
                 style={activeTab === 'approved' ? { 
-                  borderColor: COLORS.primary, 
-                  color: COLORS.primary 
+                  borderColor: COLORS.primaryColor, 
+                  color: COLORS.primaryColor 
                 } : {}}
               >
                 Approved

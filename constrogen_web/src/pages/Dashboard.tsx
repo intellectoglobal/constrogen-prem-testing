@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -64,7 +63,7 @@ export default function Dashboard() {
             >
               <div 
                 className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: COLORS.blueBox, color: COLORS.primary }}
+                style={{ backgroundColor: COLORS.blueBox, color: COLORS.primaryColor }}
               >
                 {feature.icon}
               </div>

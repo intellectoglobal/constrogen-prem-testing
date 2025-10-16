@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '@shared/constants/theme';
 
@@ -91,7 +90,7 @@ export default function Purchase() {
               <div className="flex flex-col items-center text-center">
                 <div
                   className="mb-4 p-4 rounded-full"
-                  style={{ backgroundColor: COLORS.blueBox, color: COLORS.primary }}
+                  style={{ backgroundColor: COLORS.blueBox, color: COLORS.primaryColor }}
                 >
                   {getIcon(item.iconName)}
                 </div>

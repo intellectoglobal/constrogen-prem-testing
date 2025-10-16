@@ -33,29 +33,29 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    checkRefetchToken: (state, action: PayloadAction<any>) => {
+    checkRefetchToken: (state: AuthState, _action: PayloadAction<any>) => {
       state.loading = true;
       state.error = null;
     },
-    refetchTokenSuccess: (state, action: PayloadAction<any>) => {
+    refetchTokenSuccess: (state: AuthState, action: PayloadAction<any>) => {
       return {
         ...state,
         loading: false,
         ...action?.payload,
       };
     },
-    refetchTokenSuccessFailure: (state, action: PayloadAction<any>) => {
+    refetchTokenSuccessFailure: (state: AuthState, action: PayloadAction<any>) => {
       state.loading = false;
       state.error = action?.payload;
     },
-    logoutRequest: (state) => {
+    logoutRequest: (state: AuthState) => {
       return {
         ...state,
         ...initialState,
         loading: true,
       };
     },
-    logoutSuccess: (state) => {
+    logoutSuccess: (_state: AuthState) => {
       return {
         ...initialState,
       };

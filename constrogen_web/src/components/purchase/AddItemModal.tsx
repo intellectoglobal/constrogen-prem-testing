@@ -165,7 +165,7 @@ export default function AddItemModal({
         <div className="p-6 space-y-4">
           {loading ? (
             <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: COLORS.primary }}></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: COLORS.primaryColor }}></div>
             </div>
           ) : (
             <>
@@ -251,7 +251,7 @@ export default function AddItemModal({
                     <span className="text-sm font-medium" style={{ color: COLORS.secondaryText }}>
                       Total Price:
                     </span>
-                    <span className="text-lg font-bold" style={{ color: COLORS.primary }}>
+                    <span className="text-lg font-bold" style={{ color: COLORS.primaryColor }}>
                       ${totalPrice}
                     </span>
                   </div>

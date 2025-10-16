@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '@shared/constants/theme';
 import { Project, ItemType, RequisitionItem, requisitionApi } from '../services/requisitionApi';
@@ -127,7 +127,7 @@ export default function PurchaseRequisitionForm() {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: COLORS.primary }}></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: COLORS.primaryColor }}></div>
             <p className="mt-4 text-sm" style={{ color: COLORS.secondaryText }}>
               Loading form...
             </p>
@@ -145,7 +145,7 @@ export default function PurchaseRequisitionForm() {
           <button
             onClick={() => navigate('/purchase')}
             className="flex items-center mb-4 text-sm font-medium hover:opacity-80 transition-opacity"
-            style={{ color: COLORS.primary }}
+            style={{ color: COLORS.primaryColor }}
           >
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -159,7 +159,7 @@ export default function PurchaseRequisitionForm() {
             Fill in the details below to create a new purchase request
           </p>
           {docId > 0 && (
-            <p className="mt-1 text-sm font-medium" style={{ color: COLORS.primary }}>
+            <p className="mt-1 text-sm font-medium" style={{ color: COLORS.primaryColor }}>
               PR Number: {docId}
             </p>
           )}
@@ -335,7 +335,7 @@ export default function PurchaseRequisitionForm() {
                       <td className="px-4 py-3" style={{ color: COLORS.primaryText }}>
                         {item.unitPrice ? `$${item.unitPrice}` : '-'}
                       </td>
-                      <td className="px-4 py-3 font-medium" style={{ color: COLORS.primary }}>
+                      <td className="px-4 py-3 font-medium" style={{ color: COLORS.primaryColor }}>
                         {item.totalPrice ? `$${item.totalPrice}` : '-'}
                       </td>
                       <td className="px-4 py-3">
@@ -372,7 +372,7 @@ export default function PurchaseRequisitionForm() {
                     <span className="text-sm font-semibold" style={{ color: COLORS.secondaryText }}>
                       Total Amount:
                     </span>
-                    <span className="text-xl font-bold" style={{ color: COLORS.primary }}>
+                    <span className="text-xl font-bold" style={{ color: COLORS.primaryColor }}>
                       ${items.reduce((sum, item) => sum + parseFloat(item.totalPrice || '0'), 0).toFixed(2)}
                     </span>
                   </div>

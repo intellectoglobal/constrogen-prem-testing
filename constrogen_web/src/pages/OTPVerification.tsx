@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
@@ -77,7 +77,7 @@ export default function OtpVerificationScreen() {
     reset({ otp: "" });
     
     try {
-      const { isAxiosError, message, ...res } = (await authApi.verifyEmail({
+      const { isAxiosError, message } = (await authApi.verifyEmail({
         email: params?.email,
       })) as any;
       

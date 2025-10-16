@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { COLORS } from '@shared/constants/theme';
 import { RequisitionData, requisitionApi } from '../services/requisitionApi';
@@ -83,7 +83,7 @@ export default function PurchaseRequisitionReview() {
           <button
             onClick={handleEdit}
             className="flex items-center mb-4 text-sm font-medium hover:opacity-80 transition-opacity"
-            style={{ color: COLORS.primary }}
+            style={{ color: COLORS.primaryColor }}
           >
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -211,7 +211,7 @@ export default function PurchaseRequisitionReview() {
                     <td className="px-4 py-3" style={{ color: COLORS.primaryText }}>
                       {item.unitPrice ? `$${item.unitPrice}` : '-'}
                     </td>
-                    <td className="px-4 py-3 font-medium" style={{ color: COLORS.primary }}>
+                    <td className="px-4 py-3 font-medium" style={{ color: COLORS.primaryColor }}>
                       {item.totalPrice ? `$${item.totalPrice}` : '-'}
                     </td>
                   </tr>
@@ -227,7 +227,7 @@ export default function PurchaseRequisitionReview() {
                 <span className="text-base font-semibold" style={{ color: COLORS.secondaryText }}>
                   Total Amount:
                 </span>
-                <span className="text-2xl font-bold" style={{ color: COLORS.primary }}>
+                <span className="text-2xl font-bold" style={{ color: COLORS.primaryColor }}>
                   ${requisitionData.totalAmount}
                 </span>
               </div>
@@ -268,9 +268,9 @@ export default function PurchaseRequisitionReview() {
         </div>
 
         {/* Information Box */}
-        <div className="mt-6 bg-blue-50 border-l-4 p-4 rounded" style={{ borderColor: COLORS.primary }}>
+        <div className="mt-6 bg-blue-50 border-l-4 p-4 rounded" style={{ borderColor: COLORS.primaryColor }}>
           <div className="flex">
-            <svg className="w-6 h-6 mr-3" style={{ color: COLORS.primary }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-6 h-6 mr-3" style={{ color: COLORS.primaryColor }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
