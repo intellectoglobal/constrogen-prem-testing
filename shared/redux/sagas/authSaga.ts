@@ -17,12 +17,12 @@ export const createAuthSaga = (storageService: IStorageService) => {
     try {
       const { isAuthenticatedVerify = false, ...restPayload } = action?.payload || {};
 
-      let authInfo = (yield call([storageService, 'get'], StorageKeys.AUTH_INFO)) as any;
+      let authInfo = (yield call(() => storageService.get(StorageKeys.AUTH_INFO))) as any;
 
       if (authInfo === null && !isAuthenticatedVerify) {
         const isAuthenticated = true;
         authInfo = { ...restPayload, isAuthenticated };
-        yield call([storageService, 'set'], StorageKeys.AUTH_INFO, authInfo);
+        yield call(() => storageService.set(StorageKeys.AUTH_INFO, authInfo));
       }
 
       // Split tokens to auth slice
@@ -46,7 +46,7 @@ export const createAuthSaga = (storageService: IStorageService) => {
 
   function* logoutSaga(): Generator<any, void, any> {
     try {
-      yield call([storageService, 'remove'], StorageKeys.AUTH_INFO);
+      yield call(() => storageService.remove(StorageKeys.AUTH_INFO));
       yield put(refetchTokenSuccess(initialState));
       yield put(clearUserProfile());
     } catch (error: any) {
