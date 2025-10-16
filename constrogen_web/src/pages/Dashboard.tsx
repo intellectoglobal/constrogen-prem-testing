@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { COLORS } from "@shared/constants/theme";
+import { COLORS } from "shared/constants/theme";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { user } = useSelector((state: RootState) => state.user);
+  const user  = useSelector((state: RootState) => state.user);
 
   const features = [
     {

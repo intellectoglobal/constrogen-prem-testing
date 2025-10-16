@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { takeLatest, call, put } from 'redux-saga/effects';
 import {
   checkRefetchToken,
   logoutRequest,

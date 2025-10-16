@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutRequest } from '@shared/redux/slices/authSlice';
+import { logoutRequest } from 'shared/redux/slices/authSlice';
 import { RootState } from '../../store';
-import { COLORS } from '@shared/constants/theme';
+import { COLORS } from 'shared/constants/theme';
 
 export default function Layout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {

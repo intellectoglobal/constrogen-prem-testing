@@ -1,5 +1,5 @@
-import { PurchaseRequest, getStatusColor, getStatusLabel } from '@shared/types/purchase';
-import { COLORS } from '@shared/constants/theme';
+import { PurchaseRequest, getStatusColor, getStatusLabel } from 'shared/types/purchase';
+import { COLORS } from 'shared/constants/theme';
 
 interface PurchaseRequestDetailsModalProps {
   request: PurchaseRequest;

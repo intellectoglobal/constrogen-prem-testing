@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '@shared/constants/theme';
+import { COLORS } from 'shared/constants/theme';
 import { Project, ItemType, RequisitionItem, requisitionApi } from '../services/requisitionApi';
 import { showToast } from '../utils/toast';
 import AddItemModal from '../components/purchase/AddItemModal';

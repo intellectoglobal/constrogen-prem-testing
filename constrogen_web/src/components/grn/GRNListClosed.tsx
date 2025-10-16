@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { GRN } from '@shared/types/purchase';
+import { GRN } from 'shared/types/purchase';
 import { grnApi } from '../../services/grnApi';
 import { showToast } from '../../utils/toast';
-import { COLORS } from '@shared/constants/theme';
+import { COLORS } from 'shared/constants/theme';
 import GRNCard from './GRNCard';
 import GRNDetailsModal from './GRNDetailsModal';
 
@@ -18,7 +18,7 @@ export default function GRNListClosed() {
     try {
       setLoading(true);
       const data = await grnApi.getGRNList('api/transaction/grn/?without_pagination=1');
-      const closedGRNs = data.filter(grn => ['A', 'R', 'C'].includes(grn.status));
+      const closedGRNs = data.filter((grn: GRN) => ['A', 'R', 'C'].includes(grn.status));
       setGrns(closedGRNs);
       setFilteredGRNs(closedGRNs);
     } catch (error) {

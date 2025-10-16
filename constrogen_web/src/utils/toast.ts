@@ -1,4 +1,4 @@
-import { ToastMessage } from "@shared/utils/errorHandler";
+import { ToastMessage } from "shared/utils/errorHandler";
 
 /**
  * Simple toast notification system for web

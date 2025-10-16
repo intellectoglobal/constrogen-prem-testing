@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { COLORS } from '@shared/constants/theme';
+import { COLORS } from 'shared/constants/theme';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;

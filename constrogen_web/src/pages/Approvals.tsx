@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { COLORS } from '@shared/constants/theme';
+import { COLORS } from 'shared/constants/theme';
 import PendingApprovals from '../components/approvals/PendingApprovals';
 import ApprovedRequests from '../components/approvals/ApprovedRequests';
 

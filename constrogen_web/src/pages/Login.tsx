@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../services/api";
 import { showToast } from "../utils/toast";
-import { COLORS } from "@shared/constants/theme";
+import { COLORS } from "shared/constants/theme";
 
 export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
