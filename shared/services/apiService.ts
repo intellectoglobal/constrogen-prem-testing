@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, } from "axios";
 import { IStorageService, StorageKeys } from "./storageService";
 
 // Configure your base API URL
@@ -23,7 +23,7 @@ export const createApiService = (storageService: IStorageService, logoutCallback
 
   // Request interceptor
   api.interceptors.request.use(
-    async (config) => {
+    async (config: AxiosRequestConfig) => {
       const authInfo = (await storageService?.get(StorageKeys.AUTH_INFO)) as any;
       
       if (authInfo?.isAuthenticated) {
@@ -48,7 +48,7 @@ export const createApiService = (storageService: IStorageService, logoutCallback
 
       return config;
     },
-    (error) => {
+    (error: AxiosError) => {
       if (isDev) {
         console.error("API Request Error:", {
           error: error.message,
@@ -61,7 +61,7 @@ export const createApiService = (storageService: IStorageService, logoutCallback
 
   // Response interceptor
   api.interceptors.response.use(
-    (response) => {
+    (response: AxiosResponse) => {
       if (isDev) {
         console.log("API Response:", {
           method: response.config.method?.toUpperCase(),
@@ -73,7 +73,7 @@ export const createApiService = (storageService: IStorageService, logoutCallback
       }
       return response;
     },
-    async (error) => {
+    async (error: AxiosError) => {
       const res = error.response;
       
       if (isDev) {

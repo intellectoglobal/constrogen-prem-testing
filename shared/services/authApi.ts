@@ -5,6 +5,8 @@ export const AUTH_VERIFY_OTP = `${AUTH}verify-otp/`;
 export interface ApiClient {
   get: <T>(endpoint: string, params?: Record<string, any>) => Promise<T>;
   post: <T>(endpoint: string, data?: Record<string, any>) => Promise<T>;
+  put: <T>(endpoint: string, data?: Record<string, any>) => Promise<T>;
+  del?: <T>(endpoint: string, params?: Record<string, any>) => Promise<T>;
 }
 
 /**
