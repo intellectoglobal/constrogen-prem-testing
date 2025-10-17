@@ -50,39 +50,51 @@ export default function Layout() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.gray50 }}>
       {/* Top Navigation Bar */}
-      <header className="bg-white shadow-sm border-b fixed w-full top-0 z-40">
+      <header className="bg-white shadow-sm border-b fixed w-full top-0 z-40" style={{ borderColor: COLORS.border }}>
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and App Name */}
             <div className="flex items-center">
               <button
-                className="lg:hidden mr-2 p-2 rounded-md hover:bg-gray-100"
+                className="lg:hidden mr-2 p-2 rounded-md hover:bg-gray-100 transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: COLORS.primaryText }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <img src="/hook128.png" alt="Logo" className="w-8 h-8 mr-3" />
-              <h1 className="text-xl font-bold" style={{ color: COLORS.primaryColor }}>
-                Constrogen
-              </h1>
+              <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard')}>
+                <img src="/hook128.png" alt="Logo" className="w-8 h-8 mr-3" />
+                <div>
+                  <h1 className="text-xl font-bold leading-tight" style={{ color: COLORS.primaryColor }}>
+                    Constrogen
+                  </h1>
+                  <p className="text-xs leading-tight" style={{ color: COLORS.secondaryText }}>
+                    Purchase Management
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex space-x-1">
+            <nav className="hidden lg:flex space-x-2">
               {menuItems.map((item) => (
                 <button
                   key={item.path}
                   onClick={() => navigate(item.path)}
-                  className={`flex items-center px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                  className={`flex items-center px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                     isActive(item.path)
-                      ? 'bg-primary bg-opacity-10'
+                      ? 'shadow-sm'
                       : 'hover:bg-gray-100'
                   }`}
-                  style={isActive(item.path) ? { color: COLORS.primaryColor } : { color: COLORS.primaryText }}
+                  style={isActive(item.path) ? { 
+                    backgroundColor: `${COLORS.primaryColor}15`,
+                    color: COLORS.primaryColor 
+                  } : { 
+                    color: COLORS.primaryText 
+                  }}
                 >
                   {item.icon}
                   <span className="ml-2">{item.name}</span>
@@ -91,21 +103,32 @@ export default function Layout() {
             </nav>
 
             {/* User Menu */}
-            <div className="flex items-center space-x-4">
-              <div className="hidden sm:block text-right">
-                <p className="text-sm font-medium" style={{ color: COLORS.primaryText }}>
-                  {user?.first_name || user?.user_name || 'User'}
-                </p>
-                <p className="text-xs" style={{ color: COLORS.secondaryText }}>
-                  {user?.email}
-                </p>
+            <div className="flex items-center space-x-3">
+              <div className="hidden sm:flex items-center space-x-3">
+                <div className="text-right">
+                  <p className="text-sm font-medium leading-tight" style={{ color: COLORS.primaryText }}>
+                    {user?.first_name || user?.user_name || 'User'}
+                  </p>
+                  <p className="text-xs leading-tight" style={{ color: COLORS.secondaryText }}>
+                    {user?.email}
+                  </p>
+                </div>
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
+                  style={{ backgroundColor: COLORS.primaryColor }}
+                >
+                  {(user?.first_name?.[0] || user?.user_name?.[0] || 'U').toUpperCase()}
+                </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 rounded-md text-white font-medium hover:opacity-90 transition-opacity"
+                className="flex items-center px-4 py-2 rounded-lg text-white font-medium hover:opacity-90 transition-all duration-200 shadow-sm hover:shadow"
                 style={{ backgroundColor: COLORS.button }}
               >
-                Logout
+                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span className="hidden sm:inline">Logout</span>
               </button>
             </div>
           </div>
@@ -113,8 +136,8 @@ export default function Layout() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t bg-white">
-            <nav className="px-4 py-2 space-y-1">
+          <div className="lg:hidden border-t bg-white shadow-lg" style={{ borderColor: COLORS.border }}>
+            <nav className="px-4 py-4 space-y-2">
               {menuItems.map((item) => (
                 <button
                   key={item.path}
@@ -122,12 +145,17 @@ export default function Layout() {
                     navigate(item.path);
                     setMobileMenuOpen(false);
                   }}
-                  className={`w-full flex items-center px-4 py-3 rounded-md font-medium text-sm transition-colors ${
+                  className={`w-full flex items-center px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
                     isActive(item.path)
-                      ? 'bg-primary bg-opacity-10'
+                      ? 'shadow-sm'
                       : 'hover:bg-gray-100'
                   }`}
-                  style={isActive(item.path) ? { color: COLORS.primaryColor } : { color: COLORS.primaryText }}
+                  style={isActive(item.path) ? { 
+                    backgroundColor: `${COLORS.primaryColor}15`,
+                    color: COLORS.primaryColor 
+                  } : { 
+                    color: COLORS.primaryText 
+                  }}
                 >
                   {item.icon}
                   <span className="ml-3">{item.name}</span>

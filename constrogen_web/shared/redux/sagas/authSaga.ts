@@ -4,9 +4,6 @@ import {
   put,
   fork,
   cancel,
-  ForkEffect,
-  TakeEffect,
-  CancelEffect,
 } from "redux-saga/effects";
 import {
   checkRefetchToken,
@@ -66,21 +63,32 @@ export const createAuthSaga = (storageService: IStorageService) => {
     }
   }
 
-  // Helper to mimic takeLatest for a single pattern
-  function* watchAndTakeLatest(
-    actionType: string,
-    saga: (...args: any[]) => any
-  ): Generator<ForkEffect | TakeEffect | CancelEffect, void, any> {
+  // Watcher for checkRefetchToken
+  function* watchCheckRefetchToken(): Generator<any, void, any> {
+    let lastTask;
     while (true) {
-      const action = yield take(actionType);
-      const task = yield fork(saga, action);
-      yield take(actionType);
-      yield cancel(task);
+      const action = yield take(checkRefetchToken.type);
+      if (lastTask) {
+        yield cancel(lastTask);
+      }
+      lastTask = yield fork(verifyOtpSaga, action);
     }
   }
 
-  return function* authSaga() {
-    yield fork(watchAndTakeLatest, checkRefetchToken.type, verifyOtpSaga);
-    yield fork(watchAndTakeLatest, logoutRequest.type, logoutSaga);
+  // Watcher for logoutRequest
+  function* watchLogoutRequest(): Generator<any, void, any> {
+    let lastTask;
+    while (true) {
+      yield take(logoutRequest.type);
+      if (lastTask) {
+        yield cancel(lastTask);
+      }
+      lastTask = yield fork(logoutSaga);
+    }
+  }
+
+  return function* authSaga(): Generator<any, void, any> {
+    yield fork(watchCheckRefetchToken);
+    yield fork(watchLogoutRequest);
   };
 };

@@ -91,117 +91,160 @@ export default function PurchaseHistory() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.gray50 }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-8">
           <button
             onClick={() => navigate('/purchase')}
-            className="flex items-center mb-4 text-sm font-medium hover:opacity-80 transition-opacity"
+            className="flex items-center mb-4 text-sm font-medium hover:opacity-80 transition-all duration-200 group"
             style={{ color: COLORS.primaryColor }}
           >
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to Purchase
           </button>
-          <h1 className="text-3xl font-bold" style={{ color: COLORS.primaryText }}>
-            Purchase History
-          </h1>
-          <p className="mt-2 text-sm" style={{ color: COLORS.secondaryText }}>
-            View all purchase requisitions and their status
-          </p>
-        </div>
-
-        {/* Filters */}
-        <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => handleStatusFilterChange('all')}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                statusFilter === 'all' ? 'text-white' : 'bg-gray-100'
-              }`}
-              style={statusFilter === 'all' ? { backgroundColor: COLORS.primaryColor } : { color: COLORS.primaryText }}
-            >
-              All
-            </button>
-            <button
-              onClick={() => handleStatusFilterChange('P')}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                statusFilter === 'P' ? 'text-white' : 'bg-gray-100'
-              }`}
-              style={statusFilter === 'P' ? { backgroundColor: '#FFA500' } : { color: COLORS.primaryText }}
-            >
-              Pending
-            </button>
-            <button
-              onClick={() => handleStatusFilterChange('A')}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                statusFilter === 'A' ? 'text-white' : 'bg-gray-100'
-              }`}
-              style={statusFilter === 'A' ? { backgroundColor: '#4CAF50' } : { color: COLORS.primaryText }}
-            >
-              Approved
-            </button>
-            <button
-              onClick={() => handleStatusFilterChange('R')}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                statusFilter === 'R' ? 'text-white' : 'bg-gray-100'
-              }`}
-              style={statusFilter === 'R' ? { backgroundColor: '#F44336' } : { color: COLORS.primaryText }}
-            >
-              Rejected
-            </button>
-            <button
-              onClick={() => handleStatusFilterChange('C')}
-              className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                statusFilter === 'C' ? 'text-white' : 'bg-gray-100'
-              }`}
-              style={statusFilter === 'C' ? { backgroundColor: '#2196F3' } : { color: COLORS.primaryText }}
-            >
-              Closed
-            </button>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold" style={{ color: COLORS.primaryText }}>
+                Purchase History
+              </h1>
+              <p className="mt-2 text-base" style={{ color: COLORS.secondaryText }}>
+                View and manage all purchase requisitions
+              </p>
+            </div>
+            <div className="hidden sm:block">
+              <div className="text-right">
+                <p className="text-sm font-medium" style={{ color: COLORS.secondaryText }}>Total Requests</p>
+                <p className="text-3xl font-bold" style={{ color: COLORS.primaryColor }}>{purchaseRequests.length}</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Search */}
-        <div className="mb-6">
-          <SearchBar onSearch={handleSearch} placeholder="Search by PR number, project, or item type..." />
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="mt-4 px-4 py-2 rounded-md text-white font-medium disabled:opacity-50 transition-colors"
-            style={{ backgroundColor: COLORS.button }}
-          >
-            {refreshing ? 'Refreshing...' : 'Refresh'}
-          </button>
+        {/* Filters & Search Card */}
+        <div className="mb-6 bg-white rounded-xl shadow-sm border p-6" style={{ borderColor: COLORS.border }}>
+          <div className="space-y-4">
+            {/* Status Filters */}
+            <div>
+              <h3 className="text-sm font-semibold mb-3" style={{ color: COLORS.primaryText }}>Filter by Status</h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleStatusFilterChange('all')}
+                  className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    statusFilter === 'all' ? 'text-white shadow-md transform scale-105' : 'hover:bg-gray-100'
+                  }`}
+                  style={statusFilter === 'all' ? { backgroundColor: COLORS.primaryColor } : { backgroundColor: COLORS.gray100, color: COLORS.primaryText }}
+                >
+                  <span className="mr-2">📋</span> All
+                </button>
+                <button
+                  onClick={() => handleStatusFilterChange('P')}
+                  className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    statusFilter === 'P' ? 'text-white shadow-md transform scale-105' : 'hover:bg-orange-50'
+                  }`}
+                  style={statusFilter === 'P' ? { backgroundColor: COLORS.warning } : { backgroundColor: `${COLORS.warning}15`, color: COLORS.warning }}
+                >
+                  <span className="mr-2">⏳</span> Pending
+                </button>
+                <button
+                  onClick={() => handleStatusFilterChange('A')}
+                  className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    statusFilter === 'A' ? 'text-white shadow-md transform scale-105' : 'hover:bg-green-50'
+                  }`}
+                  style={statusFilter === 'A' ? { backgroundColor: COLORS.success } : { backgroundColor: `${COLORS.success}15`, color: COLORS.success }}
+                >
+                  <span className="mr-2">✅</span> Approved
+                </button>
+                <button
+                  onClick={() => handleStatusFilterChange('R')}
+                  className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    statusFilter === 'R' ? 'text-white shadow-md transform scale-105' : 'hover:bg-red-50'
+                  }`}
+                  style={statusFilter === 'R' ? { backgroundColor: COLORS.error } : { backgroundColor: `${COLORS.error}15`, color: COLORS.error }}
+                >
+                  <span className="mr-2">❌</span> Rejected
+                </button>
+                <button
+                  onClick={() => handleStatusFilterChange('C')}
+                  className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    statusFilter === 'C' ? 'text-white shadow-md transform scale-105' : 'hover:bg-blue-50'
+                  }`}
+                  style={statusFilter === 'C' ? { backgroundColor: COLORS.info } : { backgroundColor: `${COLORS.info}15`, color: COLORS.info }}
+                >
+                  <span className="mr-2">🔒</span> Closed
+                </button>
+              </div>
+            </div>
+
+            {/* Search Bar */}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <SearchBar onSearch={handleSearch} placeholder="Search by PR number, project, or item type..." />
+              </div>
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="px-6 py-2 rounded-lg text-white font-semibold disabled:opacity-50 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2"
+                style={{ backgroundColor: COLORS.primaryColor }}
+              >
+                <svg className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span className="hidden sm:inline">{refreshing ? 'Refreshing...' : 'Refresh'}</span>
+              </button>
+            </div>
+
+            {/* Results Count */}
+            {filteredRequests.length !== purchaseRequests.length && (
+              <div className="text-sm" style={{ color: COLORS.secondaryText }}>
+                Showing <span className="font-semibold" style={{ color: COLORS.primaryColor }}>{filteredRequests.length}</span> of {purchaseRequests.length} requests
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Purchase List */}
         {filteredRequests.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <svg
-              className="mx-auto h-16 w-16 text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <h3 className="text-lg font-medium mb-2" style={{ color: COLORS.primaryText }}>
+          <div className="bg-white rounded-xl shadow-sm border p-16 text-center" style={{ borderColor: COLORS.border }}>
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6" style={{ backgroundColor: `${COLORS.primaryColor}10` }}>
+              <svg
+                className="h-12 w-12"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                style={{ color: COLORS.primaryColor }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.primaryText }}>
               No Purchase Requests Found
             </h3>
-            <p className="text-sm" style={{ color: COLORS.secondaryText }}>
+            <p className="text-base mb-6" style={{ color: COLORS.secondaryText }}>
               {purchaseRequests.length === 0 ? 'No purchase requests have been created yet' : 'Try changing your filters or search term'}
             </p>
+            {purchaseRequests.length === 0 && (
+              <button
+                onClick={() => navigate('/purchase-requisition')}
+                className="inline-flex items-center px-6 py-3 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                style={{ backgroundColor: COLORS.primaryColor }}
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Create First Request
+              </button>
+            )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredRequests.map((request) => (
               <PurchaseRequestCard
                 key={request.key}

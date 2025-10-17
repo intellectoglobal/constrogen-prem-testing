@@ -68,7 +68,7 @@ export default function Purchase() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: COLORS.gray50 }}>
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
@@ -76,49 +76,97 @@ export default function Purchase() {
           <h1 className="text-3xl font-bold" style={{ color: COLORS.primaryText }}>
             Purchase Management
           </h1>
-          <p className="mt-2 text-sm" style={{ color: COLORS.secondaryText }}>
+          <p className="mt-2 text-base" style={{ color: COLORS.secondaryText }}>
             Manage purchase orders, requisitions, and goods receipt notes
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {/* Main Menu Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {menuItems.map((item, index) => (
             <div
               key={index}
               onClick={() => handleCardClick(item.route)}
-              className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 p-6"
+              className="bg-white rounded-xl shadow-sm border hover:shadow-lg hover:border-transparent transition-all duration-300 cursor-pointer group p-8"
+              style={{ borderColor: COLORS.border }}
             >
               <div className="flex flex-col items-center text-center">
                 <div
-                  className="mb-4 p-4 rounded-full"
-                  style={{ backgroundColor: COLORS.blueBox, color: COLORS.primaryColor }}
+                  className="mb-6 p-6 rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${COLORS.primaryColor}15`, color: COLORS.primaryColor }}
                 >
                   {getIcon(item.iconName)}
                 </div>
-                <h3 className="text-lg font-semibold mb-2" style={{ color: COLORS.primaryText }}>
+                <h3 className="text-xl font-bold mb-2" style={{ color: COLORS.primaryText }}>
                   {item.title}
                 </h3>
                 {item.description && (
-                  <p className="text-sm" style={{ color: COLORS.secondaryText }}>
+                  <p className="text-sm leading-relaxed" style={{ color: COLORS.secondaryText }}>
                     {item.description}
                   </p>
                 )}
+                <div className="mt-4 flex items-center text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: COLORS.primaryColor }}>
+                  <span>View Details</span>
+                  <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium opacity-90">Active Orders</p>
+                <p className="text-3xl font-bold mt-2">28</p>
+              </div>
+              <svg className="w-12 h-12 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium opacity-90">Completed GRN</p>
+                <p className="text-3xl font-bold mt-2">156</p>
+              </div>
+              <svg className="w-12 h-12 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium opacity-90">Pending Approval</p>
+                <p className="text-3xl font-bold mt-2">12</p>
+              </div>
+              <svg className="w-12 h-12 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
         {/* Coming Soon Section */}
-        <div className="mt-12 bg-white rounded-lg shadow-md p-8 text-center">
-          <div className="inline-block p-4 rounded-full bg-gray-100 mb-4">
-            <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+        <div className="bg-gradient-to-r from-white to-gray-50 rounded-xl shadow-sm border p-10 text-center" style={{ borderColor: COLORS.border }}>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6" style={{ backgroundColor: `${COLORS.primaryColor}15` }}>
+            <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" style={{ color: COLORS.primaryColor }}>
               <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
             </svg>
           </div>
-          <h3 className="text-xl font-semibold mb-2" style={{ color: COLORS.primaryText }}>
+          <h3 className="text-2xl font-bold mb-2" style={{ color: COLORS.primaryText }}>
             More Features Coming Soon
           </h3>
-          <p className="text-sm" style={{ color: COLORS.secondaryText }}>
-            Purchase analytics, advanced reporting, and more features are in development
+          <p className="text-base max-w-2xl mx-auto" style={{ color: COLORS.secondaryText }}>
+            Purchase analytics, advanced reporting, budget tracking, and more features are in active development
           </p>
         </div>
       </div>
