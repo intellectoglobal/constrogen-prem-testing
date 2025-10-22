@@ -27,9 +27,10 @@ export default function Dashboard() {
       ),
       color: COLORS.warning,
       bgColor: '#fef3c7',
+      path: '/approvals',
     },
     {
-      title: 'Active Purchase Orders',
+      title: 'Active Requisition',
       value: '28',
       change: '+5 this week',
       changeType: 'increase',
@@ -40,6 +41,7 @@ export default function Dashboard() {
       ),
       color: COLORS.info,
       bgColor: '#dbeafe',
+      path: "/purchase-history/?status=P"
     },
     {
       title: 'Completed GRNs',
@@ -53,6 +55,7 @@ export default function Dashboard() {
       ),
       color: COLORS.success,
       bgColor: '#d1fae5',
+      path: "/purchase-order-grn"
     },
     {
       title: 'Total Requisitions',
@@ -66,6 +69,7 @@ export default function Dashboard() {
       ),
       color: COLORS.primaryColor,
       bgColor: COLORS.blueBox,
+      path: "/purchase-history"
     },
   ];
 
@@ -159,7 +163,8 @@ export default function Dashboard() {
             <div
               key={index}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border"
-              style={{ borderColor: COLORS.border }}
+              style={{ borderColor: COLORS.border, cursor:"pointer" }}
+              onClick={() => navigate(stat.path)}
             >
               <div className="flex items-center justify-between mb-4">
                 <div
