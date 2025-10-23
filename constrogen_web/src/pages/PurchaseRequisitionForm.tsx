@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { COLORS } from '../../shared/constants/theme';
 import { Project, ItemType, RequisitionItem, requisitionApi } from '../services/requisitionApi';
 import { showToast } from '../utils/toast';
@@ -12,6 +12,7 @@ interface FormItem extends RequisitionItem {
 
 export default function PurchaseRequisitionForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [itemTypes, setItemTypes] = useState<ItemType[]>([]);
   const [projectKey, setProjectKey] = useState<number>(0);
@@ -29,6 +30,27 @@ export default function PurchaseRequisitionForm() {
     fetchInitialData();
   }, []);
 
+  // ✅ Pre-populate form when editing from review or history
+  useEffect(() => {
+    if (location.state && projects.length > 0 && itemTypes.length > 0) {
+      const stateData = location.state as any;
+      
+      console.log('📝 Form State Data:', stateData);
+      console.log('🔧 Edit Mode:', stateData.isEditing ? 'YES' : 'NO');
+      console.log('🔑 Request Key:', stateData.requestKey);
+      
+      if (stateData.proj_key) setProjectKey(stateData.proj_key);
+      if (stateData.item_type_key) setItemTypeKey(stateData.item_type_key);
+      if (stateData.stage) setStage(stateData.stage);
+      if (stateData.requiredDate) setRequiredDate(stateData.requiredDate);
+      if (stateData.notes) setNotes(stateData.notes);
+      if (stateData.number) setDocId(stateData.number);
+      if (stateData.items && Array.isArray(stateData.items)) {
+        setItems(stateData.items);
+      }
+    }
+  }, [location.state, projects, itemTypes]);
+
   const fetchInitialData = async () => {
     setLoading(true);
     try {
@@ -39,7 +61,10 @@ export default function PurchaseRequisitionForm() {
       ]);
       setProjects(projectsData);
       setItemTypes(itemTypesData);
-      setDocId(docIdData);
+      // Only set new docId if we're not editing (i.e., no location state with existing number)
+      if (!location.state || !(location.state as any).number) {
+        setDocId(docIdData);
+      }
     } catch (error) {
       console.error('Error fetching initial data:', error);
       showToast({ message: 'Failed to load form data', toastType: 'error' });
@@ -105,6 +130,11 @@ export default function PurchaseRequisitionForm() {
     const itemType = itemTypes.find(t => t.key === itemTypeKey);
     const totalAmount = items.reduce((sum, item) => sum + parseFloat(item.totalPrice || '0'), 0).toFixed(2);
 
+    // Check if we're in edit mode from location state
+    const stateData = location.state as any;
+    const isEditing = stateData?.isEditing || false;
+    const requestKey = stateData?.requestKey;
+
     navigate('/purchase-requisition/review', {
       state: {
         proj_key: projectKey,
@@ -118,6 +148,9 @@ export default function PurchaseRequisitionForm() {
         totalAmount,
         project: project?.name || '',
         itemType: itemType?.descr || '',
+        // Preserve edit mode flags
+        isEditing,
+        requestKey,
       },
     });
   };
@@ -155,10 +188,14 @@ export default function PurchaseRequisitionForm() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold" style={{ color: COLORS.primaryText }}>
-                Create Purchase Requisition
+                {location.state && (location.state as any).isEditing 
+                  ? 'Edit Purchase Requisition' 
+                  : 'Create Purchase Requisition'}
               </h1>
               <p className="mt-2 text-base" style={{ color: COLORS.secondaryText }}>
-                Fill in the details below to create a new purchase request
+                {location.state && (location.state as any).isEditing
+                  ? 'Update the details for your purchase request'
+                  : 'Fill in the details below to create a new purchase request'}
               </p>
             </div>
             {docId > 0 && (

@@ -7,7 +7,11 @@ import PurchaseRequestCard from '../purchase/PurchaseRequestCard';
 import PurchaseRequestDetailsModal from '../purchase/PurchaseRequestDetailsModal';
 import SearchBar from '../common/SearchBar';
 
-export default function PendingApprovals() {
+interface PendingApprovalsProps {
+  onCountChange?: (count: number) => void;
+}
+
+export default function PendingApprovals({ onCountChange }: PendingApprovalsProps) {
   const [purchaseRequests, setPurchaseRequests] = useState<PurchaseRequest[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<PurchaseRequest[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<PurchaseRequest | null>(null);
@@ -22,9 +26,16 @@ export default function PendingApprovals() {
       );
       setPurchaseRequests(data);
       setFilteredRequests(data);
+      // Update parent with the count
+      if (onCountChange) {
+        onCountChange(data.length);
+      }
     } catch (error) {
       console.error('Error fetching purchase requests:', error);
       showToast({ message: 'Failed to load pending approvals', toastType: 'error' });
+      if (onCountChange) {
+        onCountChange(0);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

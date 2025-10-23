@@ -101,6 +101,38 @@ export default function PurchaseHistory() {
     fetchPurchaseRequests();
   };
 
+  // ✅ Handle edit request - navigate to form with existing data
+  const handleEditRequest = (request: PurchaseRequest) => {
+    // Transform the request data to form data format
+    const formData = {
+      proj_key: request.proj_key,
+      item_type_key: request.item_type_key,
+      docid: 'PR',
+      number: request.number,
+      stage: '', // Not available in request, user can re-select
+      requiredDate: '', // Not available in request, user can re-select
+      notes: request.desc || '',
+      items: request.purchs_req_items.map((item) => ({
+        key: item.key,
+        item_key: item.item_key,
+        name: item.items.descr,
+        qty: item.qty,
+        item_uom_key: item.item_uom_key,
+        uom: item.uom,
+        unitPrice: '', // Not available in request
+        totalPrice: '', // Not available in request
+      })),
+      project: request.project.name,
+      itemType: request.item_type,
+      totalAmount: '0', // Recalculate in form
+      isEditing: true, // Flag to indicate we're editing
+      requestKey: request.key, // Store the original request key for updating
+    };
+    
+    navigate('/purchase-requisition', { state: formData });
+    setSelectedRequest(null);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -415,6 +447,8 @@ export default function PurchaseHistory() {
             request={selectedRequest}
             onClose={() => setSelectedRequest(null)}
             showActions={false}
+            showEditButton={true}
+            onEdit={handleEditRequest}
           />
         )}
       </div>

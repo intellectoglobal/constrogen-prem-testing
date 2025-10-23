@@ -7,7 +7,11 @@ import PurchaseRequestCard from '../purchase/PurchaseRequestCard';
 import PurchaseRequestDetailsModal from '../purchase/PurchaseRequestDetailsModal';
 import SearchBar from '../common/SearchBar';
 
-export default function ApprovedRequests() {
+interface ApprovedRequestsProps {
+  onCountChange?: (count: number) => void;
+}
+
+export default function ApprovedRequests({ onCountChange }: ApprovedRequestsProps) {
   const [purchaseRequests, setPurchaseRequests] = useState<PurchaseRequest[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<PurchaseRequest[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<PurchaseRequest | null>(null);
@@ -22,9 +26,16 @@ export default function ApprovedRequests() {
       );
       setPurchaseRequests(data);
       setFilteredRequests(data);
+      // Update parent with the count
+      if (onCountChange) {
+        onCountChange(data.length);
+      }
     } catch (error) {
       console.error('Error fetching approved requests:', error);
       showToast({ message: 'Failed to load approved requests', toastType: 'error' });
+      if (onCountChange) {
+        onCountChange(0);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

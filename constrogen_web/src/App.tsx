@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './store';
+import { checkRefetchToken } from '../shared/redux/slices/authSlice';
+import { COLORS } from '../shared/constants/theme';
 import Login from './pages/Login';
 import OTPVerification from './pages/OTPVerification';
 import Dashboard from './pages/Dashboard';
@@ -44,7 +46,25 @@ function PublicRoute({ children }: { children: JSX.Element }) {
 // }
 
 function App() {
+  const dispatch = useDispatch();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
   useEffect(() => {
+    // Check for persisted auth state on app initialization
+    const checkPersistedAuth = async () => {
+      try {
+        dispatch(checkRefetchToken({ isAuthenticatedVerify: true }));
+        // Give saga time to process
+        await new Promise(resolve => setTimeout(resolve, 500));
+      } catch (error) {
+        console.error('Error checking persisted auth:', error);
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkPersistedAuth();
+
     // Register service worker for PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -58,7 +78,24 @@ function App() {
         );
       });
     }
-  }, []);
+  }, [dispatch]);
+
+  // Show loading screen while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: COLORS.gray50 }}>
+        <div className="text-center">
+          <div
+            className="animate-spin rounded-full h-16 w-16 border-b-4 mx-auto mb-4"
+            style={{ borderColor: COLORS.primaryColor }}
+          ></div>
+          <p className="text-lg font-medium" style={{ color: COLORS.primaryText }}>
+            Loading...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>

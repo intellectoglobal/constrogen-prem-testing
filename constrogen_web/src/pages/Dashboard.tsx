@@ -3,22 +3,56 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { COLORS } from "../../shared/constants/theme";
 import { useState, useEffect } from "react";
+import { approvalApi } from "../services/approvalApi";
+import { grnApi } from "../services/grnApi";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [pendingApprovalsCount, setPendingApprovalsCount] = useState<number>(0);
+  const [activeRequisitionsCount, setActiveRequisitionsCount] = useState<number>(0);
+  const [completedGRNsCount, setCompletedGRNsCount] = useState<number>(0);
+  const [totalRequisitionsCount, setTotalRequisitionsCount] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
+  // Fetch dashboard counts
+  useEffect(() => {
+    const fetchDashboardCounts = async () => {
+      setLoading(true);
+      try {
+        // Fetch all data in parallel
+        const [pendingData, activeData, grnData, totalData] = await Promise.all([
+          approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1&status=P'),
+          approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1&status=P'),
+          grnApi.getGRNList('api/transaction/grn/?without_pagination=1&status=C'),
+          approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1'),
+        ]);
+
+        setPendingApprovalsCount(pendingData.length || 0);
+        setActiveRequisitionsCount(activeData.length || 0);
+        setCompletedGRNsCount(grnData.length || 0);
+        setTotalRequisitionsCount(totalData.length || 0);
+      } catch (error) {
+        console.error('Error fetching dashboard counts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardCounts();
+  }, []);
+
   const stats = [
     {
       title: 'Pending Approvals',
-      value: '12',
-      change: '+3 today',
+      value: loading ? '...' : String(pendingApprovalsCount),
+      change: 'Requires action',
       changeType: 'increase',
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -31,8 +65,8 @@ export default function Dashboard() {
     },
     {
       title: 'Active Requisition',
-      value: '28',
-      change: '+5 this week',
+      value: loading ? '...' : String(activeRequisitionsCount),
+      change: 'Pending status',
       changeType: 'increase',
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -45,8 +79,8 @@ export default function Dashboard() {
     },
     {
       title: 'Completed GRNs',
-      value: '156',
-      change: '+12 this month',
+      value: loading ? '...' : String(completedGRNsCount),
+      change: 'Closed status',
       changeType: 'increase',
       icon: (
         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,7 +93,7 @@ export default function Dashboard() {
     },
     {
       title: 'Total Requisitions',
-      value: '340',
+      value: loading ? '...' : String(totalRequisitionsCount),
       change: 'All time',
       changeType: 'neutral',
       icon: (

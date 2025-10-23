@@ -5,6 +5,8 @@ import ApprovedRequests from '../components/approvals/ApprovedRequests';
 
 export default function Approvals() {
   const [activeTab, setActiveTab] = useState<'pending' | 'approved'>('pending');
+  const [pendingCount, setPendingCount] = useState<number>(0);
+  const [approvedCount, setApprovedCount] = useState<number>(0);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: COLORS.gray50 }}>
@@ -43,7 +45,7 @@ export default function Approvals() {
                   </svg>
                   <span>Pending</span>
                   <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-600'}`}>
-                    12
+                    {pendingCount}
                   </span>
                 </div>
               </button>
@@ -66,7 +68,7 @@ export default function Approvals() {
                   </svg>
                   <span>Approved</span>
                   <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'approved' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                    86
+                    {approvedCount}
                   </span>
                 </div>
               </button>
@@ -76,7 +78,11 @@ export default function Approvals() {
 
         {/* Tab Content */}
         <div>
-          {activeTab === 'pending' ? <PendingApprovals /> : <ApprovedRequests />}
+          {activeTab === 'pending' ? (
+            <PendingApprovals onCountChange={setPendingCount} />
+          ) : (
+            <ApprovedRequests onCountChange={setApprovedCount} />
+          )}
         </div>
       </div>
     </div>

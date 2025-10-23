@@ -6,7 +6,9 @@ interface PurchaseRequestDetailsModalProps {
   onClose: () => void;
   onApprove?: (request: PurchaseRequest) => void;
   onReject?: (request: PurchaseRequest) => void;
+  onEdit?: (request: PurchaseRequest) => void;
   showActions?: boolean;
+  showEditButton?: boolean;
 }
 
 export default function PurchaseRequestDetailsModal({
@@ -14,7 +16,9 @@ export default function PurchaseRequestDetailsModal({
   onClose,
   onApprove,
   onReject,
+  onEdit,
   showActions = false,
+  showEditButton = false,
 }: PurchaseRequestDetailsModalProps) {
   return (
     <div
@@ -157,15 +161,27 @@ export default function PurchaseRequestDetailsModal({
         </div>
 
         {/* Actions */}
-        {showActions && (
+        {(showActions || showEditButton) && (
           <div className="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-end space-x-3">
             <button
               onClick={onClose}
               className="px-6 py-2 rounded-md font-medium border transition-colors"
               style={{ borderColor: COLORS.inputBorder, color: COLORS.primaryText }}
             >
-              Cancel
+              {showEditButton ? 'Close' : 'Cancel'}
             </button>
+            {showEditButton && onEdit && request.status === 'P' && (
+              <button
+                onClick={() => onEdit(request)}
+                className="px-6 py-2 rounded-md text-white font-medium transition-colors hover:opacity-90 flex items-center gap-2"
+                style={{ backgroundColor: COLORS.info }}
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit Request
+              </button>
+            )}
             {onReject && (
               <button
                 onClick={() => onReject(request)}

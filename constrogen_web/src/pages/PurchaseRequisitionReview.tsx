@@ -19,9 +19,18 @@ export default function PurchaseRequisitionReview() {
       unitPrice?: string;
       totalPrice?: string;
     }>;
+    isEditing?: boolean;
+    requestKey?: number;
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isEditMode = requisitionData?.isEditing && requisitionData?.requestKey;
+
+  // Debug logging
+  console.log('🔍 Review Page - Requisition Data:', requisitionData);
+  console.log('🔧 Is Edit Mode:', isEditMode);
+  console.log('🔑 Request Key:', requisitionData?.requestKey);
+  console.log('📝 Is Editing Flag:', requisitionData?.isEditing);
 
   if (!requisitionData) {
     navigate('/purchase-requisition');
@@ -51,19 +60,36 @@ export default function PurchaseRequisitionReview() {
         })),
       };
 
-      await requisitionApi.submitRequisition(submitData);
+      console.log('📤 Submitting with mode:', isEditMode ? 'UPDATE' : 'CREATE');
+      console.log('📦 Submit Data:', submitData);
       
-      showToast({
-        message: 'Purchase requisition submitted successfully!',
-        toastType: 'success',
-      });
+      // Use UPDATE if editing, CREATE if new
+      if (isEditMode) {
+        console.log('🔄 Calling UPDATE API with key:', requisitionData.requestKey);
+        await requisitionApi.updateRequisition(requisitionData.requestKey!, submitData);
+        showToast({
+          message: 'Purchase requisition updated successfully!',
+          toastType: 'success',
+        });
+      } else {
+        console.log('➕ Calling CREATE API');
+        await requisitionApi.submitRequisition(submitData);
+        showToast({
+          message: 'Purchase requisition submitted successfully!',
+          toastType: 'success',
+        });
+      }
 
       // Navigate to purchase history
       navigate('/purchase-history');
     } catch (error: any) {
       console.error('Error submitting requisition:', error);
+      const errorMessage = error?.response?.data?.detail || 
+                          error?.response?.data?.message || 
+                          error?.message ||
+                          `Failed to ${isEditMode ? 'update' : 'submit'} purchase requisition`;
       showToast({
-        message: error?.response?.data?.message || 'Failed to submit purchase requisition',
+        message: errorMessage,
         toastType: 'error',
       });
     } finally {
@@ -91,10 +117,12 @@ export default function PurchaseRequisitionReview() {
             Back to Edit
           </button>
           <h1 className="text-3xl font-bold" style={{ color: COLORS.primaryText }}>
-            Request Review
+            {isEditMode ? 'Edit Purchase Request' : 'Request Review'}
           </h1>
           <p className="mt-2 text-sm" style={{ color: COLORS.secondaryText }}>
-            Review your purchase requisition before submitting
+            {isEditMode 
+              ? 'Review your changes before updating the purchase requisition'
+              : 'Review your purchase requisition before submitting'}
           </p>
         </div>
 
@@ -254,11 +282,11 @@ export default function PurchaseRequisitionReview() {
             {isSubmitting ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                Submitting...
+                {isEditMode ? 'Updating...' : 'Submitting...'}
               </>
             ) : (
               <>
-                Submit Request
+                {isEditMode ? 'Update Request' : 'Submit Request'}
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
@@ -275,10 +303,12 @@ export default function PurchaseRequisitionReview() {
             </svg>
             <div>
               <p className="text-sm font-medium" style={{ color: COLORS.primaryText }}>
-                Review Before Submitting
+                {isEditMode ? 'Review Before Updating' : 'Review Before Submitting'}
               </p>
               <p className="text-sm mt-1" style={{ color: COLORS.secondaryText }}>
-                Please review all details carefully. Once submitted, the purchase requisition will be sent for approval.
+                {isEditMode 
+                  ? 'Please review all changes carefully. Once updated, the purchase requisition will be modified.'
+                  : 'Please review all details carefully. Once submitted, the purchase requisition will be sent for approval.'}
               </p>
             </div>
           </div>
