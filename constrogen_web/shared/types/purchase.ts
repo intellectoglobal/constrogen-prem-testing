@@ -54,6 +54,8 @@ export interface GRNItem {
 }
 
 export interface GRN {
+  vendor: any;
+  project: any;
   key: number;
   grn_items: GRNItem[];
   grn_imgs: (string | {
