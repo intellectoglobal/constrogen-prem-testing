@@ -66,7 +66,7 @@ export default function Layout() {
                 </svg>
               </button>
               <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard')}>
-                <img src="/hook128.png" alt="Logo" className="w-8 h-8 mr-3" />
+                <img src="/logo2.png" alt="Logo" sizes='150x100' className="w-15 h-10 mr-3" />
                 <div>
                   <h1 className="text-xl font-bold leading-tight" style={{ color: COLORS.primaryColor }}>
                     Constrogen

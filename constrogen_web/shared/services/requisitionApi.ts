@@ -106,7 +106,7 @@ export const createRequisitionApi = (apiClient: ApiClient) => ({
 
   async updateRequisition(key: number, data: RequisitionData): Promise<any> {
     try {
-      const res = await apiClient.put(`api/transaction/purchase/requisition/${key}/`, data);
+      const res = await apiClient.put(`api/transaction/purchase/requisition/${key}`, data);
       return (res as any).data || res;
     } catch (error: any) {
       console.error('Error updating requisition:', error);

@@ -95,20 +95,60 @@ export default function GRNDetailsModal({
         newImages.map(file => convertImageToBase64(file))
       );
 
-      // Prepare update data
+      // Prepare update data in the same format as GET API response
       const updateData = {
-        grn_items: editedItems,
-        status: selectedStatus,
+        key: grn.key,
+        grn_items: editedItems.map(item => ({
+          ...item,
+          // Keep all existing properties from the original item
+          hdr_key: grn.key,
+          company: grn.company_id || 1,
+          client_id: grn.client_id || 1,
+          // Update the received_qty with the edited value
+          received_qty: item.received_qty.toString(),
+          // Preserve other properties that might exist
+          createdby: item.createdby || grn.createdby,
+          createddttm: item.createddttm,
+          lastmodifiedby: grn.lastmodifiedby,
+          lastmodifieddttm: item.lastmodifieddttm,
+        })),
         grn_imgs: [
-          // Existing images as strings
-          ...grn.grn_imgs.map(img => 
-            typeof img === 'string' ? img : img.image_url
-          ),
-          // New images as objects with image_url
+          // Existing images - keep them as objects with all properties
+          ...grn.grn_imgs.map(img => {
+            if (typeof img === 'string') {
+              // If it's just a string, convert to object format
+              return {
+                image_url: img,
+                hdr_key: grn.key,
+                company: grn.company_id || 1,
+                client_id: grn.client_id || 1,
+              };
+            }
+            return img;
+          }),
+          // New images - send as objects without key (for new images)
           ...base64Images.map(base64 => ({
             image_url: base64,
+            hdr_key: grn.key,
+            company: grn.company_id || 1,
+            client_id: grn.client_id || 1,
           })),
         ],
+        status: selectedStatus,
+        // Include all other GRN properties
+        vendor: grn.vendor,
+        project: grn.project,
+        pr_number: grn.pr_number,
+        date: grn.date,
+        number: grn.number,
+        comments: grn.comments,
+        createdby: grn.createdby,
+        createddttm: grn.createddttm,
+        lastmodifiedby: grn.lastmodifiedby,
+        lastmodifieddttm: grn.lastmodifieddttm,
+        po_key: grn.po_key,
+        company_id: grn.company_id || 1,
+        client_id: grn.client_id || 1,
       };
 
       await grnApi.updateGRN(grn.key, updateData);
@@ -350,6 +390,7 @@ export default function GRNDetailsModal({
                   <input
                     type="file"
                     accept="image/*"
+                    capture="environment"
                     multiple
                     onChange={handleImageUpload}
                     className="hidden"
