@@ -216,12 +216,6 @@ export default function PurchaseRequisitionReview() {
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase" style={{ color: COLORS.secondaryText }}>
                     UOM
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase" style={{ color: COLORS.secondaryText }}>
-                    Unit Price
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase" style={{ color: COLORS.secondaryText }}>
-                    Total
-                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -231,35 +225,15 @@ export default function PurchaseRequisitionReview() {
                       {item.name}
                     </td>
                     <td className="px-4 py-3" style={{ color: COLORS.primaryText }}>
-                      {item.qty}
+                      {parseFloat(item.qty) % 1 === 0 ? parseInt(item.qty) : parseFloat(item.qty)}
                     </td>
                     <td className="px-4 py-3" style={{ color: COLORS.primaryText }}>
                       {item.uom}
-                    </td>
-                    <td className="px-4 py-3" style={{ color: COLORS.primaryText }}>
-                      {item.unitPrice ? `$${item.unitPrice}` : '-'}
-                    </td>
-                    <td className="px-4 py-3 font-medium" style={{ color: COLORS.primaryColor }}>
-                      {item.totalPrice ? `$${item.totalPrice}` : '-'}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-
-          {/* Total Amount */}
-          <div className="mt-6 flex justify-end">
-            <div className="bg-blue-50 rounded-lg px-8 py-4 min-w-[250px]">
-              <div className="flex justify-between items-center">
-                <span className="text-base font-semibold" style={{ color: COLORS.secondaryText }}>
-                  Total Amount:
-                </span>
-                <span className="text-2xl font-bold" style={{ color: COLORS.primaryColor }}>
-                  ${requisitionData.totalAmount}
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 

@@ -6,7 +6,11 @@ import { COLORS } from '../../../shared/constants/theme';
 import GRNCard from './GRNCard';
 import GRNDetailsModal from './GRNDetailsModal';
 
-export default function GRNListClosed() {
+interface GRNListClosedProps {
+  onCountChange?: (count: number) => void;
+}
+
+export default function GRNListClosed({ onCountChange }: GRNListClosedProps) {
   const [grns, setGrns] = useState<GRN[]>([]);
   const [filteredGRNs, setFilteredGRNs] = useState<GRN[]>([]);
   const [selectedGRN, setSelectedGRN] = useState<GRN | null>(null);
@@ -21,14 +25,21 @@ export default function GRNListClosed() {
       const closedGRNs = data.filter((grn: GRN) => ['A', 'R', 'C'].includes(grn.status));
       setGrns(closedGRNs);
       setFilteredGRNs(closedGRNs);
+      // Update parent with the count
+      if (onCountChange) {
+        onCountChange(closedGRNs.length);
+      }
     } catch (error) {
       console.error('Error fetching GRNs:', error);
       showToast({ message: 'Failed to load GRNs', toastType: 'error' });
+      if (onCountChange) {
+        onCountChange(0);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [onCountChange]);
 
   useEffect(() => {
     fetchGRNs();

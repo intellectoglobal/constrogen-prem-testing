@@ -15,37 +15,114 @@ export default function Dashboard() {
   const [completedGRNsCount, setCompletedGRNsCount] = useState<number>(0);
   const [totalRequisitionsCount, setTotalRequisitionsCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [recentActivities, setRecentActivities] = useState<Array<{
+    action: string;
+    time: string;
+    icon: string;
+    color: string;
+  }>>([]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch dashboard counts
+  // Fetch dashboard counts and recent activities
   useEffect(() => {
-    const fetchDashboardCounts = async () => {
+    const fetchDashboardData = async () => {
       setLoading(true);
       try {
         // Fetch all data in parallel
-        const [pendingData, activeData, grnData, totalData] = await Promise.all([
+        const [pendingData, activeData, grnData, totalData, allRequests, allGRNs] = await Promise.all([
           approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1&status=P'),
           approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1&status=P'),
           grnApi.getGRNList('api/transaction/grn/?without_pagination=1&status=C'),
           approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1'),
+          approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1'),
+          grnApi.getGRNList('api/transaction/grn/?without_pagination=1'),
         ]);
 
         setPendingApprovalsCount(pendingData.length || 0);
         setActiveRequisitionsCount(activeData.length || 0);
         setCompletedGRNsCount(grnData.length || 0);
         setTotalRequisitionsCount(totalData.length || 0);
+
+        // Generate recent activities from last 2 days
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+        const activities: Array<{ action: string; time: string; icon: string; color: string; timestamp: Date }> = [];
+
+        // Add purchase requests from last 2 days
+        allRequests
+          .filter((req: any) => {
+            const createdDate = new Date(req.createddttm);
+            return createdDate >= twoDaysAgo;
+          })
+          .forEach((req: any) => {
+            const createdDate = new Date(req.createddttm);
+            activities.push({
+              action: `Purchase Requisition #${req.number} ${req.status === 'A' ? 'approved' : req.status === 'R' ? 'rejected' : 'submitted'}`,
+              time: getRelativeTime(createdDate),
+              icon: req.status === 'A' ? '✓' : req.status === 'R' ? '✗' : '📝',
+              color: req.status === 'A' ? COLORS.success : req.status === 'R' ? COLORS.error : COLORS.warning,
+              timestamp: createdDate,
+            });
+          });
+
+        // Add GRNs from last 2 days
+        allGRNs
+          .filter((grn: any) => {
+            const createdDate = new Date(grn.createddttm || grn.date);
+            return createdDate >= twoDaysAgo;
+          })
+          .forEach((grn: any) => {
+            const createdDate = new Date(grn.createddttm || grn.date);
+            const statusText = ['P', 'PR'].includes(grn.status) ? 'open' : 'closed';
+            activities.push({
+              action: `GRN #${grn.number} ${statusText}`,
+              time: getRelativeTime(createdDate),
+              icon: '📦',
+              color: COLORS.info,
+              timestamp: createdDate,
+            });
+          });
+
+        // Sort by timestamp (most recent first) and take top 4
+        const sortedActivities = activities
+          .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+          .slice(0, 4)
+          .map(({ timestamp, ...rest }) => rest); // Remove timestamp from final output
+
+        setRecentActivities(sortedActivities.length > 0 ? sortedActivities : [
+          { action: 'No recent activity in the last 2 days', time: '', icon: 'ℹ️', color: COLORS.secondaryText }
+        ]);
       } catch (error) {
-        console.error('Error fetching dashboard counts:', error);
+        console.error('Error fetching dashboard data:', error);
+        setRecentActivities([
+          { action: 'Failed to load recent activity', time: '', icon: '⚠️', color: COLORS.error }
+        ]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDashboardCounts();
+    // Helper function to get relative time
+    const getRelativeTime = (date: Date): string => {
+      const now = new Date();
+      const diffMs = now.getTime() - date.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+      if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      if (diffDays === 1) return '1 day ago';
+      return `${diffDays} days ago`;
+    };
+
+    fetchDashboardData();
   }, []);
 
   const stats = [
@@ -152,13 +229,6 @@ export default function Dashboard() {
       path: '/purchase-order-grn',
       color: COLORS.success,
     },
-  ];
-
-  const recentActivities = [
-    { action: 'Purchase Requisition #PR234 approved', time: '2 hours ago', icon: '✓', color: COLORS.success },
-    { action: 'New GRN #GRN489 created', time: '4 hours ago', icon: '📦', color: COLORS.info },
-    { action: 'Purchase Order #PO567 submitted', time: '6 hours ago', icon: '📝', color: COLORS.warning },
-    { action: 'Approval request for PR #PR233', time: '1 day ago', icon: '⏳', color: COLORS.secondaryText },
   ];
 
   return (

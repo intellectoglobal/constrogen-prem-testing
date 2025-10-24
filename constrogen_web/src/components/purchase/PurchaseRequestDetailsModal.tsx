@@ -109,7 +109,7 @@ export default function PurchaseRequestDetailsModal({
                       </h4>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm" style={{ color: COLORS.secondaryText }}>
                         <div>
-                          <span className="font-semibold">Quantity:</span> {item.qty}
+                          <span className="font-semibold">Quantity:</span> {parseFloat(item.qty) % 1 === 0 ? parseInt(item.qty) : parseFloat(item.qty)}
                         </div>
                         <div>
                           <span className="font-semibold">UOM:</span> {item.uom}

@@ -39,7 +39,9 @@ export default function AddItemModal({
     if (isOpen && editingItem) {
       setItemKey(editingItem.item_key);
       setItemName(editingItem.name);
-      setQuantity(editingItem.qty);
+      // Format quantity to remove unnecessary decimals
+      const qtyValue = parseFloat(editingItem.qty);
+      setQuantity(qtyValue % 1 === 0 ? String(parseInt(editingItem.qty)) : String(qtyValue));
       setItemUomKey(editingItem.item_uom_key);
       setUom(editingItem.uom);
       setUnitPrice(editingItem.unitPrice || '');
@@ -227,36 +229,7 @@ export default function AddItemModal({
                 </div>
               </div>
 
-              {/* Unit Price (Optional) */}
-              <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: COLORS.primaryText }}>
-                  Unit Price (Optional)
-                </label>
-                <input
-                  type="number"
-                  value={unitPrice}
-                  onChange={(e) => setUnitPrice(e.target.value)}
-                  placeholder="0.00"
-                  min="0"
-                  step="0.01"
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"
-                  style={{ borderColor: COLORS.inputBorder, color: COLORS.primaryText }}
-                />
-              </div>
-
-              {/* Total Price Display */}
-              {totalPrice && (
-                <div className="bg-gray-50 rounded-md p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium" style={{ color: COLORS.secondaryText }}>
-                      Total Price:
-                    </span>
-                    <span className="text-lg font-bold" style={{ color: COLORS.primaryColor }}>
-                      ${totalPrice}
-                    </span>
-                  </div>
-                </div>
-              )}
+              {/* Unit Price and Total Price fields removed as they're not stored in DB */}
             </>
           )}
         </div>

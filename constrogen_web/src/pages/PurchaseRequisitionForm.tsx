@@ -396,12 +396,6 @@ export default function PurchaseRequisitionForm() {
                       <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider" style={{ color: COLORS.secondaryText }}>
                         UOM
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider" style={{ color: COLORS.secondaryText }}>
-                        Unit Price
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider" style={{ color: COLORS.secondaryText }}>
-                        Total
-                      </th>
                       <th className="px-6 py-4 text-center text-xs font-bold uppercase tracking-wider" style={{ color: COLORS.secondaryText }}>
                         Actions
                       </th>
@@ -419,16 +413,10 @@ export default function PurchaseRequisitionForm() {
                           </div>
                         </td>
                         <td className="px-6 py-4 font-medium" style={{ color: COLORS.primaryText }}>
-                          {item.qty}
+                          {parseFloat(item.qty) % 1 === 0 ? parseInt(item.qty) : parseFloat(item.qty)}
                         </td>
                         <td className="px-6 py-4" style={{ color: COLORS.secondaryText }}>
                           {item.uom}
-                        </td>
-                        <td className="px-6 py-4 font-medium" style={{ color: COLORS.primaryText }}>
-                          {item.unitPrice ? `$${parseFloat(item.unitPrice).toFixed(2)}` : '-'}
-                        </td>
-                        <td className="px-6 py-4 font-bold text-lg" style={{ color: COLORS.primaryColor }}>
-                          {item.totalPrice ? `$${parseFloat(item.totalPrice).toFixed(2)}` : '-'}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex justify-center gap-2">
@@ -456,20 +444,6 @@ export default function PurchaseRequisitionForm() {
                     ))}
                   </tbody>
                 </table>
-              </div>
-
-              {/* Total Amount */}
-              <div className="flex justify-end">
-                <div className="rounded-xl px-8 py-4 border-2" style={{ borderColor: COLORS.primaryColor, backgroundColor: `${COLORS.primaryColor}08` }}>
-                  <div className="flex items-center gap-8">
-                    <span className="text-sm font-bold uppercase tracking-wider" style={{ color: COLORS.secondaryText }}>
-                      Total Amount:
-                    </span>
-                    <span className="text-3xl font-bold" style={{ color: COLORS.primaryColor }}>
-                      ${items.reduce((sum, item) => sum + parseFloat(item.totalPrice || '0'), 0).toFixed(2)}
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           )}

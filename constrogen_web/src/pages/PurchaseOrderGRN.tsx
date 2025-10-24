@@ -1,12 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../shared/constants/theme';
+import { grnApi } from '../services/grnApi';
 import GRNListOpen from '../components/grn/GRNListOpen';
 import GRNListClosed from '../components/grn/GRNListClosed';
 
 export default function PurchaseOrderGRN() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open');
+  const [openCount, setOpenCount] = useState<number>(0);
+  const [closedCount, setClosedCount] = useState<number>(0);
+
+  // Fetch both counts on initial load
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const allGRNs = await grnApi.getGRNList('api/transaction/grn/?without_pagination=1');
+        
+        const openGRNs = allGRNs.filter((grn: any) => ['P', 'PR'].includes(grn.status));
+        const closedGRNs = allGRNs.filter((grn: any) => ['A', 'R', 'C'].includes(grn.status));
+        
+        setOpenCount(openGRNs.length || 0);
+        setClosedCount(closedGRNs.length || 0);
+      } catch (error) {
+        console.error('Error fetching GRN counts:', error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: COLORS.gray50 }}>
@@ -54,7 +76,7 @@ export default function PurchaseOrderGRN() {
                   </svg>
                   <span>Open</span>
                   <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'open' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
-                    8
+                    {openCount}
                   </span>
                 </div>
               </button>
@@ -77,7 +99,7 @@ export default function PurchaseOrderGRN() {
                   </svg>
                   <span>Closed</span>
                   <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'closed' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                    143
+                    {closedCount}
                   </span>
                 </div>
               </button>
@@ -87,7 +109,11 @@ export default function PurchaseOrderGRN() {
 
         {/* Tab Content */}
         <div>
-          {activeTab === 'open' ? <GRNListOpen /> : <GRNListClosed />}
+          {activeTab === 'open' ? (
+            <GRNListOpen onCountChange={setOpenCount} />
+          ) : (
+            <GRNListClosed onCountChange={setClosedCount} />
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { COLORS } from '../../shared/constants/theme';
+import { approvalApi } from '../services/approvalApi';
 import PendingApprovals from '../components/approvals/PendingApprovals';
 import ApprovedRequests from '../components/approvals/ApprovedRequests';
 
@@ -7,6 +8,24 @@ export default function Approvals() {
   const [activeTab, setActiveTab] = useState<'pending' | 'approved'>('pending');
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [approvedCount, setApprovedCount] = useState<number>(0);
+
+  // Fetch both counts on initial load
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const [pendingData, approvedData] = await Promise.all([
+          approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1&status=P'),
+          approvalApi.getPurchaseRequestList('api/transaction/purchase/requisition/?without_pagination=1&status=A'),
+        ]);
+        setPendingCount(pendingData.length || 0);
+        setApprovedCount(approvedData.length || 0);
+      } catch (error) {
+        console.error('Error fetching approval counts:', error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: COLORS.gray50 }}>
